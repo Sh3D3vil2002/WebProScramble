@@ -13,18 +13,23 @@
 </head>
 
 <body>
-
 	<div class="container">
-		<form class="login-email" action="">
+		<form class="login-email">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
 			<div class="input-group">
-				<input type="text" placeholder="First Name" name="fname" required>
+				<input type="text" placeholder="First Name" id="fname" name="fname" required>
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Last Name" name="lname" required>
+				<input type="text" placeholder="Last Name" id="lname" name="lname" required>
 			</div>
 			<div class="input-group">
-				<input type="Date" placeholder="Date Of Birth" name="DOB" required>
+				<input type="email" placeholder="Email" id="email" required>
+			</div>
+			<div class="input-group">
+				<input type="Date" placeholder="Date Of Birth" id="dob" required>
+			</div>
+			<div class="input-group">
+				<input type="text" placeholder="Age" id="age" disabled>
 			</div>
 			<div class="input-group">
 				<select class="input-group" id="gender" name="gender" required>
@@ -34,10 +39,70 @@
 				</select>
 			</div>
 			<div class="input-group">
-				<button name="submit" class="btn">Register</button>
+				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
 			</div>
 		</form>
 	</div>
 </body>
+<script>
+
+	function register() {
+		//Validate the name
+		var fname = document.getElementById("fname").value;
+		var lname = document.getElementById("lname").value;
+		var email = document.getElementById("email").value;
+		// Check if first and last name are at least 3 characters long
+		if (fname.length < 3 || lname.length < 3) {
+			alert("First and Last Names must be more than three (3) characters in length.");
+			return false;
+		}
+
+		// Validate email
+		var emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+		if (!emailRegex.test(email)) {
+			alert("Email address must be a valid Gmail address.");
+			return false;
+		}
+
+		//Validate age
+		// Get the user's date of birth from the input field
+		var dob = new Date(document.getElementById("dob").value);
+
+		// Calculate the user's age based on their date of birth
+		var ageDiffMs = Date.now() - dob.getTime();
+		var ageDate = new Date(ageDiffMs);
+		var age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+		// Display the user's age on the page
+		var ageEl = document.getElementById("age");
+		ageEl.value = age;
+
+		// Check if the user is at least 18 years old
+		if (age >= 8 && age <= 12) {
+			ageEl.style.color = "green";
+		} else {
+			ageEl.style.color = "red";
+			ageEl.value += " (between 8 and 12 years old)";
+		}
+		return false;
+
+		// Everything is valid, submit the form
+		// alert("Registration successful!");
+		// return true;
+	}
+
+	// Get the form element
+	var form = document.querySelector('.login-email');
+
+	// Add an event listener for the form submission
+	form.addEventListener('submit', function (event) {
+		// Prevent the default form submission behavior
+		event.preventDefault();
+
+		// Call the register function
+		register();
+	});
+
+</script>
 
 </html>
