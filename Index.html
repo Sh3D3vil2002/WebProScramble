@@ -41,12 +41,53 @@
 			<div class="input-group">
 				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
 			</div>
+			<div class="input-group">
+				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()">Start</button>
+			</div>
+			<div class="input-group">
+				<button type="button" name="end" class="btn" id="end-btn" onclick="endGame()" disabled>End</button>
+			</div>
 		</form>
+		<div class="play-area" id="play-area" style="display: none;">
+			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
+			<div class="input-group">
+				<input type="text" placeholder="Enter Your Answer" id="answer-input" name="answer" required disabled>
+			</div>
+			<div class="input-group">
+				<button type="button" name="accept" id="accept-btn" class="btn" onclick="CheckAnswer()"
+					disabled>Accept</button>
+			</div>
+			<div class="input-group">
+				<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()" disabled>Next</button>
+			</div>
+			<div class="input-group">
+				<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
+			</div>
+		</div>
 	</div>
 </body>
 <script>
+	// Define global variables
+	var PlayersData = [];
+	var gameCharacters = [];
+	var answerInput = document.getElementById("answer-input");
+	var acceptBtn = document.getElementById("accept-btn");
+	var nextBtn = document.getElementById("next-btn");
+
+	// Disable game controls
+	answerInput.disabled = true;
+	acceptBtn.disabled = true;
+	nextBtn.disabled = true;
 
 	function register() {
+		// Disable all form fields and the register button
+		document.querySelectorAll(".input-group input, .input-group select, .input-group button").forEach(function (el) {
+			el.disabled = true;
+		});
+
+		// Enable the "End" and "Start" buttons
+		document.querySelector("#end-btn").disabled = false;
+		document.querySelector("#start-btn").disabled = false;
 		//Validate the name
 		var fname = document.getElementById("fname").value;
 		var lname = document.getElementById("lname").value;
@@ -84,11 +125,78 @@
 			ageEl.style.color = "red";
 			ageEl.value += " (between 8 and 12 years old)";
 		}
-		return false;
 
-		// Everything is valid, submit the form
-		// alert("Registration successful!");
-		// return true;
+		// Add the player's data to the PlayersData array
+		PlayersData.push({
+			firstName: fname,
+			lastName: lname,
+			email: email,
+			dob: dob,
+			age: age,
+			gender: document.getElementById("gender").value
+		});
+
+		return false;
+	}
+
+	function PlayGame() {
+		// Generate a random string of characters
+		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		var numCharacters = Math.floor(Math.random() * 3) + 4;
+		var randomString = "";
+		for (var i = 0; i < numCharacters; i++) {
+			randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+
+		// Display the random string in the play area
+		document.getElementById("play-area").value = randomString;
+
+		// Enable the answer input, accept button, and next button
+		document.getElementById("answer-input").disabled = false;
+		document.getElementById("accept-btn").disabled = false;
+		document.getElementById("next-btn").disabled = false;
+
+		// Clear the answer input field
+		document.getElementById("answer-input").value = "";
+
+		// Set focus to the answer input field
+		document.getElementById("answer-input").focus();
+	}
+
+	function CheckAnswer() {
+		// get the player's answer
+		var answer = document.getElementById("answer-input").value.trim();
+
+		// validate the answer
+		if (answer == "") {
+			alert("Please enter your answer.");
+			return;
+		}
+
+		// get the original characters
+		var originalChars = document.getElementById("play-area").value.trim();
+
+		// check if the answer is correct
+		var isCorrect = (answer.toLowerCase() == originalChars.toLowerCase());
+
+		// append the result to the PlayersData array
+		var playerData = {
+			originalChars: originalChars,
+			answer: answer,
+			isCorrect: isCorrect
+		};
+		PlayersData.push(playerData);
+
+		// update the score
+		var scoreElem = document.getElementById("score");
+		if (isCorrect) {
+			scoreElem.value = parseInt(scoreElem.value) + 1;
+		}
+
+		// disable the answer input and Accept button, and enable the Next button
+		document.getElementById("answer-input").disabled = true;
+		document.getElementById("accept-btn").disabled = true;
+		document.getElementById("next-btn").disabled = false;
 	}
 
 	// Get the form element
