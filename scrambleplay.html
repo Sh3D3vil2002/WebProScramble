@@ -33,6 +33,9 @@
 		
 		<div class="details">
 			<p class="Hint">Hint: <span> 
+			<!--Play Area for Words-->
+			<input type="text" id="playarea" disabled>
+
 			<p class="time">Time left: <span> <b> 60 </b>s </span> </p>
 		</div>
 				
@@ -47,11 +50,31 @@
 			<button class="refresh the word"> Refresh </button>
 			<button class="check word"> Check the word </button>	
 		</div>
+
+		<!--Only for Testing Purposes-->
+		<button onclick="PlayGame()">Test PlayGame Function</button>
 		
 
 
 
 	</body>
+	<script>
+		//Storage for Words
+		var wordDatabase = [['o d g o'], ['a t r e s m'], ['u s t d y']];
+
+		//Selection of HTML Elements
+		var playarea = document.getElementById('playarea');
+
+
+		function PlayGame(){
+			//Generation of A random number
+			//This number is used to select the index of the array
+			let randomNumber = Math.floor(Math.random() * wordDatabase.length);
+
+			//Output of Words to the Database
+			playarea.value = wordDatabase[randomNumber];
+		}
+	</script>
 	
 	
 	
