@@ -10,6 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<title>Scramble</title>
+	<!--Imports PLayGame.js-->
+	<script src="PlayGame.js"></script>
 </head>
 
 <body>
@@ -35,7 +37,15 @@
 			</div>
 			<div class="input-group">
 				<button name="submit" class="btn">Register</button>
+				</br>
+				
+				
 			</div>
+			<!--Calls the PlayGame function in PlayGame.js also Sends us to the PlayArea-->
+			<button onclick="PlayGame()">
+				<a href="./scrambleplay.html" style="text-decoration: none;">Skip</a>
+			</button>
+			
 		</form>
 	</div>
 
@@ -44,5 +54,6 @@
 		
 			
 </body>
+
 
 </html>
