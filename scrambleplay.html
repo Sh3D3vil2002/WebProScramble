@@ -9,7 +9,9 @@
 
 	<head>
 		<title>Word scramble play</title>
+		<!--Importing Javascript Files that Store Functions-->
 		<script src="./PlayGame.js"></script>
+		<script src="./CheckAnswer.js"></script>
 		<script src="./wordbase.js"></script>
 		<script src="./script.js"></script>
 		<link rel="stylesheet" href="style.css">
@@ -47,8 +49,6 @@
 				
 				
 			<!--Play Area for Words-->
-				
-				
 			<input type="text" id="playarea" disabled>
 
 			<p class="time">Time left: <span> <b> 60 </b>s </span> </p>
@@ -57,6 +57,7 @@
 				
 		
 		
+		<!--User Input-->
 		<label for="answer_input">Answer: </label></br>
 		<input id="answer_input" type="text" placeholder="Enter a word">
 		
@@ -65,10 +66,11 @@
 		<div class="buttons">
 			
 			<button class="refresh the word"> Refresh </button>
-			<button class="check word"> Check the word </button>	
+			<!--Calls CheckAnswer() function-->
+			<button class="check word" onclick="CheckAnswer(playArea, answerInput)"> Check the word </button>
 		</div>
 		
-		<div class="score"><span>Score: </span> <span class="score"> 0 </span>
+		<div class="score" ><span>Score: </span> <span class="score" id="score">0</span>
 		</div>
 		
 
@@ -76,17 +78,51 @@
 
 	</body>
 	<script>
+		//JavaScript Object that Stores userAnswers, playAreaOutput & score in arrays
+		//This Object is then Placed in the PlayerData Array
+		var PlayAreaObject = {
+			//Array that Stores User Answers
+			userAnswers : [],
+
+			//PlayArea Output
+			playAreaOutput : [],
+
+			//Score
+			score : [],
+
+		};
+
+		//PlayerData
+		var PlayerData = [PlayAreaObject];
+
+		
+		//Storage for Words
+		var wordDatabase = [['a t r e s m'], ['o r w m']];
+
+		//Generation of A random number
+		//This number is used to select the index of the array
+		let randomNumber = Math.floor(Math.random() * wordDatabase.length);
+
+		
+		//Selection of HTML Elements
+		var playArea = document.getElementById('playarea');
+		var answerInput = document.getElementById('answer_input');
+		var score = document.getElementById('score');
+
+		score.textContent = 0;
+
+		
+
 		//When this html page loads, the PlayGame function is called again
 		window.onload = (e) => {
 			PlayGame();
 		}
 		
+			
+
 		/* PlayGame() function is in its own file */
+		/* CheckAnswer() function is in its own file */
 	</script>
-	
-	
-	
-	</div>
 	
 	
 	
