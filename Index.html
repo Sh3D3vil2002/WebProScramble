@@ -14,7 +14,7 @@
 
 <body>
 	<div class="container">
-		<form class="login-email">
+		<form id="form" class="login-email" style="display: block">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
 			<div class="input-group">
 				<input type="text" placeholder="First Name" id="fname" name="fname" required>
@@ -42,27 +42,36 @@
 				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()">Start</button>
+				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()"
+					disabled>Start</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="end" class="btn" id="end-btn" onclick="endGame()" disabled>End</button>
+				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()" disabled>End</button>
 			</div>
 		</form>
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
-			<div class="input-group">
-				<input type="text" placeholder="Enter Your Answer" id="answer-input" name="answer" required disabled>
-			</div>
-			<div class="input-group">
-				<button type="button" name="accept" id="accept-btn" class="btn" onclick="CheckAnswer()"
-					disabled>Accept</button>
-			</div>
-			<div class="input-group">
-				<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()" disabled>Next</button>
-			</div>
-			<div class="input-group">
-				<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
-			</div>
+			<center>
+				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled></p>
+				<div class="input-group" style="margin-bottom: 10px;">
+					<p>Scrambled Word</p>
+					<input type="text" id="random" name="random" disabled>
+				</div>
+				<div class="input-group" style="margin-bottom: 5px;">
+					<input type="text" placeholder="Enter Your Answer" id="answer-input" name="answer" required
+						disabled>
+				</div>
+				<div class="input-group">
+					<button type="button" name="accept" id="accept-btn" class="btn" onclick="CheckAnswer()"
+						disabled>Accept</button>
+
+					<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()"
+						disabled>Next</button>
+				</div>
+				<div class="input-group">
+					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
+				</div>
+			</center>
 		</div>
 	</div>
 </body>
@@ -78,6 +87,8 @@
 	answerInput.disabled = true;
 	acceptBtn.disabled = true;
 	nextBtn.disabled = true;
+	var randomString;
+
 
 	function register() {
 		// Disable all form fields and the register button
@@ -143,13 +154,31 @@
 		// Generate a random string of characters
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		var numCharacters = Math.floor(Math.random() * 3) + 4;
-		var randomString = "";
+		randomString = "";
 		for (var i = 0; i < numCharacters; i++) {
-			randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+			randomString = randomString + characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		console.log("ANSWER: " + randomString);
+
+		var shuffle = '';
+		var rString = randomString.split('');
+		while (rString.length > 0) {
+			shuffle += rString.splice(rString.length * Math.random() << 0, 1);
 		}
 
+		//Disable the form
+		// var form = document.getElementById("form");
+		// if (form.style.display === 'block') {
+		// 	form.style.display = 'none';
+		// }
+
+		//Display play area
+		var playArea = document.getElementById("play-area");
+		if (playArea.style.display === 'none') {
+			playArea.style.display = 'block';
+		}
 		// Display the random string in the play area
-		document.getElementById("play-area").value = randomString;
+		document.getElementById("random").value = shuffle;
 
 		// Enable the answer input, accept button, and next button
 		document.getElementById("answer-input").disabled = false;
@@ -164,6 +193,7 @@
 	}
 
 	function CheckAnswer() {
+		console.log("Answer to be checked: " + randomString.toLowerCase());
 		// get the player's answer
 		var answer = document.getElementById("answer-input").value.trim();
 
@@ -173,30 +203,34 @@
 			return;
 		}
 
-		// get the original characters
-		var originalChars = document.getElementById("play-area").value.trim();
-
 		// check if the answer is correct
-		var isCorrect = (answer.toLowerCase() == originalChars.toLowerCase());
+		var isCorrect = (answer.toLowerCase() == randomString.toLowerCase());
+		console.log("Correct: " + isCorrect);
 
-		// append the result to the PlayersData array
-		var playerData = {
-			originalChars: originalChars,
-			answer: answer,
-			isCorrect: isCorrect
-		};
-		PlayersData.push(playerData);
+		if (isCorrect.valueOf(true)) {
+			console.log("In if statement, Validate answer");
+			// update the score
+			var scoreElem = document.getElementById("score");
+			if (isCorrect) {
+				console.log("In if to update score");
+				scoreElem.value = parseInt(scoreElem.value) + 1;
+			}
 
-		// update the score
-		var scoreElem = document.getElementById("score");
-		if (isCorrect) {
-			scoreElem.value = parseInt(scoreElem.value) + 1;
+			// append the result to the PlayersData array
+			var playerData = {
+				originalChars: randomString,
+				answer: answer,
+				isCorrect: isCorrect
+			};
+			PlayersData.push(playerData);
+
+			// disable the answer input and Accept button, and enable the Next button
+			document.getElementById("answer-input").disabled = true;
+			document.getElementById("accept-btn").disabled = true;
+			document.getElementById("next-btn").disabled = false;
 		}
 
-		// disable the answer input and Accept button, and enable the Next button
-		document.getElementById("answer-input").disabled = true;
-		document.getElementById("accept-btn").disabled = true;
-		document.getElementById("next-btn").disabled = false;
+
 	}
 
 	// Get the form element
