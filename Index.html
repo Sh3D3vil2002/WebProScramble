@@ -1,3 +1,6 @@
+<!-- DayJaney Pringle - 2200367
+Jake Wilson - 1506811
+Worrell Seville - 1800577   -->
 <!DOCTYPE html>
 <html>
 
@@ -10,23 +13,26 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 	<title>Scramble</title>
-	<!--Imports PLayGame.js-->
-	<script src="PlayGame.js"></script>
 </head>
 
 <body>
-
 	<div class="container">
-		<form class="login-email" action="">
+		<form id="form" class="login-email" style="display: block">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
 			<div class="input-group">
-				<input type="text" placeholder="First Name" name="fname" required>
+				<input type="text" placeholder="First Name" id="fname" name="fname" required>
 			</div>
 			<div class="input-group">
-				<input type="text" placeholder="Last Name" name="lname" required>
+				<input type="text" placeholder="Last Name" id="lname" name="lname" required>
 			</div>
 			<div class="input-group">
-				<input type="Date" placeholder="Date Of Birth" name="DOB" required>
+				<input type="email" placeholder="Email" id="email" required>
+			</div>
+			<div class="input-group">
+				<input type="Date" placeholder="Date Of Birth" id="dob" required>
+			</div>
+			<div class="input-group">
+				<input type="text" placeholder="Age" id="age" disabled>
 			</div>
 			<div class="input-group">
 				<select class="input-group" id="gender" name="gender" required>
@@ -36,24 +42,212 @@
 				</select>
 			</div>
 			<div class="input-group">
-				<button name="submit" class="btn">Register</button>
-				</br>
-				
-				
+				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
 			</div>
-			<!--Calls the PlayGame function in PlayGame.js also Sends us to the PlayArea-->
-			<button onclick="PlayGame()">
-				<a href="./scrambleplay.html" style="text-decoration: none;">Skip</a>
-			</button>
-			
+			<div class="input-group">
+				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()"
+					disabled>Start</button>
+			</div>
+			<div class="input-group">
+				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()" disabled>End</button>
+			</div>
 		</form>
+		<div class="play-area" id="play-area" style="display: none;">
+			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
+			<center>
+				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled></p>
+				<div class="input-group" style="margin-bottom: 10px;">
+					<p>Scrambled Word</p>
+					<input type="text" id="random" name="random" disabled>
+				</div>
+				<div class="input-group" style="margin-bottom: 5px;">
+					<input type="text" placeholder="Enter Your Answer" id="answer-input" name="answer" required
+						disabled>
+				</div>
+				<div class="input-group">
+					<button type="button" name="accept" id="accept-btn" class="btn" onclick="CheckAnswer()"
+						disabled>Accept</button>
+
+					<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()"
+						disabled>Next</button>
+				</div>
+				<div class="input-group">
+					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
+				</div>
+			</center>
+		</div>
 	</div>
-
-	
-	
-		
-			
 </body>
+<script>
+	// Define global variables
+	var PlayersData = [];
+	var gameCharacters = [];
+	var answerInput = document.getElementById("answer-input");
+	var acceptBtn = document.getElementById("accept-btn");
+	var nextBtn = document.getElementById("next-btn");
 
+	// Disable game controls
+	answerInput.disabled = true;
+	acceptBtn.disabled = true;
+	nextBtn.disabled = true;
+	var randomString;
+
+
+	function register() {
+		// Disable all form fields and the register button
+		document.querySelectorAll(".input-group input, .input-group select, .input-group button").forEach(function (el) {
+			el.disabled = true;
+		});
+
+		// Enable the "End" and "Start" buttons
+		document.querySelector("#end-btn").disabled = false;
+		document.querySelector("#start-btn").disabled = false;
+		//Validate the name
+		var fname = document.getElementById("fname").value;
+		var lname = document.getElementById("lname").value;
+		var email = document.getElementById("email").value;
+		// Check if first and last name are at least 3 characters long
+		if (fname.length < 3 || lname.length < 3) {
+			alert("First and Last Names must be more than three (3) characters in length.");
+			return false;
+		}
+
+		// Validate email
+		var emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+		if (!emailRegex.test(email)) {
+			alert("Email address must be a valid Gmail address.");
+			return false;
+		}
+
+		//Validate age
+		// Get the user's date of birth from the input field
+		var dob = new Date(document.getElementById("dob").value);
+
+		// Calculate the user's age based on their date of birth
+		var ageDiffMs = Date.now() - dob.getTime();
+		var ageDate = new Date(ageDiffMs);
+		var age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+		// Display the user's age on the page
+		var ageEl = document.getElementById("age");
+		ageEl.value = age;
+
+		// Check if the user is at least 18 years old
+		if (age >= 8 && age <= 12) {
+			ageEl.style.color = "green";
+		} else {
+			ageEl.style.color = "red";
+			ageEl.value += " (between 8 and 12 years old)";
+		}
+
+		// Add the player's data to the PlayersData array
+		PlayersData.push({
+			firstName: fname,
+			lastName: lname,
+			email: email,
+			dob: dob,
+			age: age,
+			gender: document.getElementById("gender").value
+		});
+
+		return false;
+	}
+
+	function PlayGame() {
+		// Generate a random string of characters
+		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		var numCharacters = Math.floor(Math.random() * 3) + 4;
+		randomString = "";
+		for (var i = 0; i < numCharacters; i++) {
+			randomString = randomString + characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		console.log("ANSWER: " + randomString);
+
+		var shuffle = '';
+		var rString = randomString.split('');
+		while (rString.length > 0) {
+			shuffle += rString.splice(rString.length * Math.random() << 0, 1);
+		}
+
+		//Disable the form
+		// var form = document.getElementById("form");
+		// if (form.style.display === 'block') {
+		// 	form.style.display = 'none';
+		// }
+
+		//Display play area
+		var playArea = document.getElementById("play-area");
+		if (playArea.style.display === 'none') {
+			playArea.style.display = 'block';
+		}
+		// Display the random string in the play area
+		document.getElementById("random").value = shuffle;
+
+		// Enable the answer input, accept button, and next button
+		document.getElementById("answer-input").disabled = false;
+		document.getElementById("accept-btn").disabled = false;
+		document.getElementById("next-btn").disabled = false;
+
+		// Clear the answer input field
+		document.getElementById("answer-input").value = "";
+
+		// Set focus to the answer input field
+		document.getElementById("answer-input").focus();
+	}
+
+	function CheckAnswer() {
+		console.log("Answer to be checked: " + randomString.toLowerCase());
+		// get the player's answer
+		var answer = document.getElementById("answer-input").value.trim();
+
+		// validate the answer
+		if (answer == "") {
+			alert("Please enter your answer.");
+			return;
+		}
+
+		// check if the answer is correct
+		var isCorrect = (answer.toLowerCase() == randomString.toLowerCase());
+		console.log("Correct: " + isCorrect);
+
+		if (isCorrect.valueOf(true)) {
+			console.log("In if statement, Validate answer");
+			// update the score
+			var scoreElem = document.getElementById("score");
+			if (isCorrect) {
+				console.log("In if to update score");
+				scoreElem.value = parseInt(scoreElem.value) + 1;
+			}
+
+			// append the result to the PlayersData array
+			var playerData = {
+				originalChars: randomString,
+				answer: answer,
+				isCorrect: isCorrect
+			};
+			PlayersData.push(playerData);
+
+			// disable the answer input and Accept button, and enable the Next button
+			document.getElementById("answer-input").disabled = true;
+			document.getElementById("accept-btn").disabled = true;
+			document.getElementById("next-btn").disabled = false;
+		}
+
+
+	}
+
+	// Get the form element
+	var form = document.querySelector('.login-email');
+
+	// Add an event listener for the form submission
+	form.addEventListener('submit', function (event) {
+		// Prevent the default form submission behavior
+		event.preventDefault();
+
+		// Call the register function
+		register();
+	});
+
+</script>
 
 </html>
