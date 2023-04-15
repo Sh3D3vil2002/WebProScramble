@@ -1,5 +1,5 @@
 <!-- DayJaney Pringle - 2200367
-Jake Wilson - 1506811
+Jade Wilson - 1506811
 Worrell Seville - 1800577   -->
 <!DOCTYPE html>
 <html>
@@ -54,8 +54,12 @@ Worrell Seville - 1800577   -->
 		</form>
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
+			
 			<center>
-				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled></p>
+				
+				<p style="margin-bottom: 10px;">Score 
+				<input type="number" class="score" id="showpercentage" value="calculate" disabled></p>
+				
 				<div class="input-group" style="margin-bottom: 10px;">
 					<p>Scrambled Word</p>
 					<input type="text" id="random" name="random" disabled>
@@ -70,10 +74,16 @@ Worrell Seville - 1800577   -->
 
 					<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()"
 						disabled>Next</button>
+
+						<button type="button" name="check-percentage" class="btn" id="check-btn" onclick="CheckPercentage()"
+						disabled>check-percentage</button>
+
 				</div>
 				<div class="input-group">
 					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
 				</div>
+				
+				
 			</center>
 		</div>
 	</div>
@@ -247,6 +257,26 @@ Worrell Seville - 1800577   -->
 		// Call the register function
 		register();
 	});
+
+	function findPercentageScore() {
+
+		//display total questions
+		document.getElementById("");
+
+		//display total correct answers
+		document.getElementById("");
+
+		//display the percentage score
+		document.getElementById("check-btn");
+
+		//display player name
+		document.getElementById("fname");
+
+		//display current date
+		document.getElementById("");
+
+		
+	};
 
 </script>
 
