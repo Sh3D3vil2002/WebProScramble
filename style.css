@@ -18,6 +18,10 @@ body {
     align-items: center;
 }
 
+.colored {
+    accent-color: #2980B9 ;
+  }
+
 .container {
     width: 400px;
     min-height: 400px;
