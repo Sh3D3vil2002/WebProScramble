@@ -63,8 +63,8 @@ Lamar                        -->
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
 			<center>
-				<p style="margin-bottom: 10px;" class="score">Score: <span> 0 </span></p>
-				<input type="number" class="score" id="score" value="0" disabled></p>
+				<p style="margin-bottom: 5px;" class="score">Score</p>
+				<input style="margin-bottom: 10px;" type="number" class="score" id="score" value="0" disabled></p>
 
 				<div class="input-group" style="margin-bottom: 10px;">
 					<p>Scrambled Word</p>
@@ -80,10 +80,6 @@ Lamar                        -->
 
 					<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()"
 						disabled>Next</button>
-
-					<button type="button" name="check-percentage" class="btn" id="check-btn" onclick="CheckPercentage()"
-						disabled>check score</button>
-
 				</div>
 				<div class="input-group">
 					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
@@ -170,6 +166,8 @@ Lamar                        -->
 	}
 
 	function PlayGame() {
+		document.getElementById("showpercentage").value = "";
+
 		quest = quest + 1;
 		// Generate a random string of characters
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -270,10 +268,6 @@ Lamar                        -->
 	let currentDate = new Date();
 
 	function findPercentageScore() {
-		var showAll = document.getElementById('showpercentage');
-		//clear Text Area
-		showAll.textContent = '';
-
 		let percentageScore = (count / quest) * 100;
 		let displayText = `Player: ${PlayersData[0].firstName + ' ' + PlayersData[0].lastName}\n`;
 		displayText += `Date: ${currentDate}\n`;
@@ -281,9 +275,12 @@ Lamar                        -->
 		displayText += `Correct Answers: ${count}\n`;
 		displayText += `Percentage Score: ${percentageScore.toFixed(2)}%\n`;
 		document.getElementById('showpercentage').value = displayText;
+	
+		
 
 		//clearform 
 		clearForm();
+
 		//enable fields
 		document.getElementById("fname").disabled = false;
 		document.getElementById("lname").disabled = false;
@@ -291,10 +288,12 @@ Lamar                        -->
 		document.getElementById("dob").disabled = false;
 		document.getElementById("gender").disabled = false;
 
+		// reset play area 
+		resetPlayArea();
 
 		//disable playarea
 		var playArea = document.getElementById("play-area");
-		if(playArea.style.display === 'block'){
+		if (playArea.style.display === 'block') {
 			playArea.style.display = 'none';
 		}
 
@@ -303,8 +302,12 @@ Lamar                        -->
 		document.querySelector("#end-btn").disabled = true;
 		document.querySelector("#start-btn").disabled = true;
 
+		//reset values
+		count = 0;
+		quest = 0;
+
 		document.getElementById("fname").focus;
-		
+
 	}
 
 	function clearForm() {
@@ -316,6 +319,14 @@ Lamar                        -->
 		document.getElementById("age").value = "";
 		document.getElementById("gender").selectedIndex = 0; // reset the dropdown to the default option
 	}
+
+	function resetPlayArea() {
+		document.getElementById("score").value = 0;
+		document.getElementById("random").value = "";
+		document.getElementById("answer-input").value = "";
+		document.getElementById("chars").textContent = "";
+	}
+
 
 </script>
 
