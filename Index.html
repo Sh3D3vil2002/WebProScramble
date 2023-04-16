@@ -43,24 +43,29 @@ Lamar                        -->
 				</select>
 			</div>
 			<div class="input-group">
-				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
+				<button type="submit" name="submit" class="btn" id="register-btn" onclick="register()">Register</button>
 			</div>
 			<div class="input-group">
 				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()"
 					disabled>Start</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()" disabled>End</button>
+				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()"
+					disabled>End</button>
 			</div>
 		</form>
+		<div>
+			<form>
+				<h6>Percentage:</h6>
+				<textarea id="showpercentage" rows="4" cols="50" disabled></textarea>
+			</form>
+		</div>
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
-			
 			<center>
-				
-				<p style="margin-bottom: 10px;" class="score" >Score: <span> 0 </span></p>
-				<input type="number" class="score" id="showpercentage" value="calculate" disabled></p>
-				
+				<p style="margin-bottom: 10px;" class="score">Score: <span> 0 </span></p>
+				<input type="number" class="score" id="score" value="0" disabled></p>
+
 				<div class="input-group" style="margin-bottom: 10px;">
 					<p>Scrambled Word</p>
 					<input type="text" id="random" name="random" disabled>
@@ -76,15 +81,13 @@ Lamar                        -->
 					<button type="button" name="next" class="btn" id="next-btn" onclick="PlayGame()"
 						disabled>Next</button>
 
-						<button type="button" name="check-percentage" class="btn" id="check-btn" onclick="CheckPercentage()"
+					<button type="button" name="check-percentage" class="btn" id="check-btn" onclick="CheckPercentage()"
 						disabled>check score</button>
 
 				</div>
 				<div class="input-group">
 					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
 				</div>
-				
-				
 			</center>
 		</div>
 	</div>
@@ -102,6 +105,9 @@ Lamar                        -->
 	acceptBtn.disabled = true;
 	nextBtn.disabled = true;
 	var randomString;
+	var count = 0;
+	var quest = 0;
+
 
 	function register() {
 		// Disable all form fields and the register button
@@ -164,6 +170,7 @@ Lamar                        -->
 	}
 
 	function PlayGame() {
+		quest = quest + 1;
 		// Generate a random string of characters
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		var numCharacters = Math.floor(Math.random() * 3) + 4;
@@ -227,12 +234,14 @@ Lamar                        -->
 			if (isCorrect) {
 				console.log("In if to update score");
 				scoreElem.value = parseInt(scoreElem.value) + 1;
+				count = count + 1;
 			}
 
 			// append the result to the PlayersData array
 			var playerData = {
 				originalChars: randomString,
 				answer: answer,
+				count: count,
 				isCorrect: isCorrect
 			};
 			PlayersData.push(playerData);
@@ -258,25 +267,53 @@ Lamar                        -->
 		register();
 	});
 
+	let currentDate = new Date();
+
 	function findPercentageScore() {
+		var showAll = document.getElementById('showpercentage');
+		//clear Text Area
+		showAll.textContent = '';
 
-		//display total questions
-		document.getElementById("");
+		let percentageScore = (count / quest) * 100;
+		let displayText = `Player: ${PlayersData[0].firstName + ' ' + PlayersData[0].lastName}\n`;
+		displayText += `Date: ${currentDate}\n`;
+		displayText += `Total Questions: ${quest}\n`;
+		displayText += `Correct Answers: ${count}\n`;
+		displayText += `Percentage Score: ${percentageScore.toFixed(2)}%\n`;
+		document.getElementById('showpercentage').value = displayText;
 
-		//display total correct answers
-		document.getElementById("");
+		//clearform 
+		clearForm();
+		//enable fields
+		document.getElementById("fname").disabled = false;
+		document.getElementById("lname").disabled = false;
+		document.getElementById("email").disabled = false;
+		document.getElementById("dob").disabled = false;
 
-		//display the percentage score
-		document.getElementById("check-btn");
+		//disable playarea
+		var playArea = document.getElementById("play-area");
+		if(playArea.style.display === 'block'){
+			playArea.style.display = 'none';
+		}
 
-		//display player name
-		document.getElementById("fname");
+		//disable buttons except register
+		document.querySelector("#register-btn").disabled = false;
+		document.querySelector("#end-btn").disabled = true;
+		document.querySelector("#start-btn").disabled = true;
 
-		//display current date
-		document.getElementById("");
-
+		document.getElementById("fname").focus;
 		
-	};
+	}
+
+	function clearForm() {
+		document.getElementById("form").reset(); // reset the form to clear any error messages
+		document.getElementById("fname").value = ""; // set the value of each input element to an empty string
+		document.getElementById("lname").value = "";
+		document.getElementById("email").value = "";
+		document.getElementById("dob").value = "";
+		document.getElementById("age").value = "";
+		document.getElementById("gender").selectedIndex = 0; // reset the dropdown to the default option
+	}
 
 </script>
 
