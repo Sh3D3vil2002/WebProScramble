@@ -49,13 +49,19 @@ Worrell Seville - 1800577   -->
 					disabled>Start</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()" disabled>End</button>
+				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()"
+					disabled>End</button>
 			</div>
 		</form>
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
 			<center>
-				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled></p>
+				<!-- timer -->
+				<p >Timer</p>
+				<progress  class="colored" style="margin-bottom: 5px; " value="0" max="10" id="progressBar"></progress>
+
+				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled>
+				</p>
 				<div class="input-group" style="margin-bottom: 10px;">
 					<p>Scrambled Word</p>
 					<input type="text" id="random" name="random" disabled>
@@ -175,13 +181,24 @@ Worrell Seville - 1800577   -->
 		// 	form.style.display = 'none';
 		// }
 
-		//Display play area
+		//Display the play area
 		var playArea = document.getElementById("play-area");
 		if (playArea.style.display === 'none') {
 			playArea.style.display = 'block';
 		}
 		// Display the random string in the play area
 		document.getElementById("random").value = shuffle;
+
+		//Timer 
+		var timeleft = 10;
+		var downloadTimer = setInterval(function () {
+			if (timeleft <= 0) {
+				clearInterval(downloadTimer);
+				PlayGame();
+			}
+			document.getElementById("progressBar").value = 10 - timeleft;
+			timeleft -= 1;
+		}, 1000);
 
 		// Enable the answer input, accept button, and next button
 		document.getElementById("answer-input").disabled = false;
@@ -196,6 +213,8 @@ Worrell Seville - 1800577   -->
 	}
 
 	function CheckAnswer() {
+		document.getElementById("progressBar").value = 15;
+
 		console.log("Answer to be checked: " + randomString.toLowerCase());
 		// get the player's answer
 		var answer = document.getElementById("answer-input").value.trim();
@@ -208,6 +227,8 @@ Worrell Seville - 1800577   -->
 
 		// check if the answer is correct
 		var isCorrect = (answer.toLowerCase() == randomString.toLowerCase());
+		alert("Awesome!! The word is correct");
+
 		console.log("Correct: " + isCorrect);
 
 		if (isCorrect.valueOf(true)) {
