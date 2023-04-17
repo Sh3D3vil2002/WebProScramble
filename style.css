@@ -24,6 +24,9 @@ body {
 
   .play-area{
     background-color: #2980B9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .play-area button{
@@ -39,7 +42,7 @@ body {
     color: #FFF;
     cursor: pointer;
     transition: .3s;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 
   .play-area button:hover{
@@ -116,6 +119,14 @@ body {
 .login-register-text a {
     text-decoration: none;
     color: #6c5ce7;
+}
+
+#showcharts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#FFF ;
+    margin-top: 20px;
 }
 
 @media (max-width: 430px) {
