@@ -1,6 +1,7 @@
 <!-- DayJaney Pringle - 2200367
-Jake Wilson - 1506811
-Worrell Seville - 1800577   -->
+     Jade Wilson      - 1506811
+     Worrell Seville  - 1800577  
+     Lamar Haye       - 2111690    -->
 <!DOCTYPE html>
 <html>
 
@@ -42,20 +43,29 @@ Worrell Seville - 1800577   -->
 				</select>
 			</div>
 			<div class="input-group">
-				<button type="submit" name="submit" class="btn" onclick="register()">Register</button>
+				<button type="submit" name="submit" class="btn" id="register-btn" onclick="register()">Register</button>
 			</div>
 			<div class="input-group">
 				<button type="button" name="start" class="btn" id="start-btn" onclick="PlayGame()"
 					disabled>Start</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()" disabled>End</button>
+				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()"
+					disabled>End</button>
 			</div>
 		</form>
+		<div>
+			<form>
+				<h6>Percentage:</h6>
+				<textarea id="showpercentage" rows="4" cols="50" disabled></textarea>
+			</form>
+		</div>
 		<div class="play-area" id="play-area" style="display: none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
 			<center>
-				<p style="margin-bottom: 10px;">Score: <input type="number" class="score" id="score" value="0" disabled></p>
+				<p style="margin-bottom: 5px;" class="score">Score</p>
+				<input style="margin-bottom: 10px;" type="number" class="score" id="score" value="0" disabled></p>
+
 				<div class="input-group" style="margin-bottom: 10px;">
 					<p>Scrambled Word</p>
 					<input type="text" id="random" name="random" disabled>
@@ -99,6 +109,8 @@ Worrell Seville - 1800577   -->
 	acceptBtn.disabled = true;
 	nextBtn.disabled = true;
 	var randomString;
+	var count = 0;
+	var quest = 0;
 
 
 	function register() {
@@ -162,6 +174,9 @@ Worrell Seville - 1800577   -->
 	}
 
 	function PlayGame() {
+		document.getElementById("showpercentage").value = "";
+
+		quest = quest + 1;
 		// Generate a random string of characters
 		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		var numCharacters = Math.floor(Math.random() * 3) + 4;
@@ -225,12 +240,14 @@ Worrell Seville - 1800577   -->
 			if (isCorrect) {
 				console.log("In if to update score");
 				scoreElem.value = parseInt(scoreElem.value) + 1;
+				count = count + 1;
 			}
 
 			// append the result to the PlayersData array
 			var playerData = {
 				originalChars: randomString,
 				answer: answer,
+				count: count,
 				isCorrect: isCorrect
 			};
 			PlayersData.push(playerData);
@@ -242,11 +259,7 @@ Worrell Seville - 1800577   -->
 			document.getElementById("accept-btn").disabled = true;
 			document.getElementById("next-btn").disabled = false;
 		}
-
-		//
 		showAll();
-
-
 	}
 
 	// Get the form element
@@ -271,6 +284,65 @@ Worrell Seville - 1800577   -->
 			+ PlayersData[i+1].originalChars + ',' + PlayersData[i+1].answer + ',' + PlayersData[i+1].isCorrect}`;
 		}
 	}
-</script>
+	let currentDate = new Date();
 
+	function findPercentageScore() {
+		let percentageScore = (count / quest) * 100;
+		let displayText = `Player: ${PlayersData[0].firstName + ' ' + PlayersData[0].lastName}\n`;
+		displayText += `Date: ${currentDate}\n`;
+		displayText += `Total Questions: ${quest}\n`;
+		displayText += `Correct Answers: ${count}\n`;
+		displayText += `Percentage Score: ${percentageScore.toFixed(2)}%\n`;
+		document.getElementById('showpercentage').value = displayText;
+
+		//clearform 
+		clearForm();
+
+		//enable fields
+		document.getElementById("fname").disabled = false;
+		document.getElementById("lname").disabled = false;
+		document.getElementById("email").disabled = false;
+		document.getElementById("dob").disabled = false;
+		document.getElementById("gender").disabled = false;
+
+		// reset play area 
+		resetPlayArea();
+
+		//disable playarea
+		var playArea = document.getElementById("play-area");
+		if (playArea.style.display === 'block') {
+			playArea.style.display = 'none';
+		}
+
+		//disable buttons except register
+		document.querySelector("#register-btn").disabled = false;
+		document.querySelector("#end-btn").disabled = true;
+		document.querySelector("#start-btn").disabled = true;
+
+		//reset values
+		count = 0;
+		quest = 0;
+
+		document.getElementById("fname").focus;
+
+	}
+
+	function clearForm() {
+		document.getElementById("form").reset(); // reset the form to clear any error messages
+		document.getElementById("fname").value = ""; // set the value of each input element to an empty string
+		document.getElementById("lname").value = "";
+		document.getElementById("email").value = "";
+		document.getElementById("dob").value = "";
+		document.getElementById("age").value = "";
+		document.getElementById("gender").selectedIndex = 0; // reset the dropdown to the default option
+	}
+
+	function resetPlayArea() {
+		document.getElementById("score").value = 0;
+		document.getElementById("random").value = "";
+		document.getElementById("answer-input").value = "";
+		document.getElementById("chars").textContent = "";
+	}
+
+</script>
 </html>
