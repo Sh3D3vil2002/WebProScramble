@@ -3,7 +3,7 @@
      Worrell Seville  - 1800577  
      Lamar Haye       - 2111690    -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
@@ -100,331 +100,329 @@
 		</div>
 		<div id="showcharts" style="display: none;"></div>
 	</div>
-</body>
-<script>
-	// Define global variables
-	var PlayersData = [];
-	var gameCharacters = [];
-	var answerInput = document.getElementById("answer-input");
-	var acceptBtn = document.getElementById("accept-btn");
-	var nextBtn = document.getElementById("next-btn");
-
-	// Disable game controls
-	answerInput.disabled = true;
-	acceptBtn.disabled = true;
-	nextBtn.disabled = true;
-	var randomString;
-	var count = 0;
-	var quest = 0;
-
-
-	function register() {
-		// Disable all form fields and the register button
-		// document.querySelectorAll(".input-group input, .input-group select, .input-group button").forEach(function (el) {
-		// 	el.disabled = true;
-		// });
-
-		// Enable the "End" and "Start" buttons
-		document.querySelector("#end-btn").disabled = false;
-		document.querySelector("#start-btn").disabled = false;
-		//Validate the name
-		var fname = document.getElementById("fname").value;
-		var lname = document.getElementById("lname").value;
-		var email = document.getElementById("email").value;
-		// Check if first and last name are at least 3 characters long
-		if (fname.length < 3 || lname.length < 3) {
-			alert("First and Last Names must be more than three (3) characters in length.");
+	<script>
+		// Define global variables
+		var PlayersData = [];
+		var gameCharacters = [];
+		var answerInput = document.getElementById("answer-input");
+		var acceptBtn = document.getElementById("accept-btn");
+		var nextBtn = document.getElementById("next-btn");
+	
+		// Disable game controls
+		answerInput.disabled = true;
+		acceptBtn.disabled = true;
+		nextBtn.disabled = true;
+		var randomString;
+		var count = 0;
+		var quest = 0;
+	
+	
+		function register() {
+			// Disable all form fields and the register button
+			// document.querySelectorAll(".input-group input, .input-group select, .input-group button").forEach(function (el) {
+			// 	el.disabled = true;
+			// });
+	
+			// Enable the "End" and "Start" buttons
+			document.querySelector("#end-btn").disabled = false;
+			document.querySelector("#start-btn").disabled = false;
+			//Validate the name
+			var fname = document.getElementById("fname").value;
+			var lname = document.getElementById("lname").value;
+			var email = document.getElementById("email").value;
+			// Check if first and last name are at least 3 characters long
+			if (fname.length < 3 || lname.length < 3) {
+				alert("First and Last Names must be more than three (3) characters in length.");
+				return false;
+			}
+	
+			// Validate email
+			var emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+			if (!emailRegex.test(email)) {
+				alert("Email address must be a valid Gmail address.");
+				return false;
+			}
+	
+			//Validate age
+			// Get the user's date of birth from the input field
+			var dob = new Date(document.getElementById("dob").value);
+	
+			// Calculate the user's age based on their date of birth
+			var ageDiffMs = Date.now() - dob.getTime();
+			var ageDate = new Date(ageDiffMs);
+			var age = Math.abs(ageDate.getUTCFullYear() - 1970);
+	
+			// Display the user's age on the page
+			var ageEl = document.getElementById("age");
+			ageEl.value = age;
+	
+			// Check if the user is at least 18 years old
+			if (age >= 8 && age <= 12) {
+				ageEl.style.color = "green";
+			} else {
+				ageEl.style.color = "red";
+				ageEl.value += " (between 8 and 12 years old)";
+			}
+	
+			// Add the player's data to the PlayersData array
+			PlayersData.push({
+				firstName: fname,
+				lastName: lname,
+				email: email,
+				dob: dob,
+				age: age,
+				gender: document.getElementById("gender").value
+			});
 			return false;
 		}
-
-		// Validate email
-		var emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
-		if (!emailRegex.test(email)) {
-			alert("Email address must be a valid Gmail address.");
-			return false;
-		}
-
-		//Validate age
-		// Get the user's date of birth from the input field
-		var dob = new Date(document.getElementById("dob").value);
-
-		// Calculate the user's age based on their date of birth
-		var ageDiffMs = Date.now() - dob.getTime();
-		var ageDate = new Date(ageDiffMs);
-		var age = Math.abs(ageDate.getUTCFullYear() - 1970);
-
-		// Display the user's age on the page
-		var ageEl = document.getElementById("age");
-		ageEl.value = age;
-
-		// Check if the user is at least 18 years old
-		if (age >= 8 && age <= 12) {
-			ageEl.style.color = "green";
-		} else {
-			ageEl.style.color = "red";
-			ageEl.value += " (between 8 and 12 years old)";
-		}
-
-		// Add the player's data to the PlayersData array
-		PlayersData.push({
-			firstName: fname,
-			lastName: lname,
-			email: email,
-			dob: dob,
-			age: age,
-			gender: document.getElementById("gender").value
-		});
-		alert("Registered Successfully");
-		return false;
-	}
-
-	function PlayGame() {
-		document.getElementById("showpercentage").value = "";
-
-		quest = quest + 1;
-		// Generate a random string of characters
-		var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		var numCharacters = Math.floor(Math.random() * 3) + 4;
-		randomString = "";
-		for (var i = 0; i < numCharacters; i++) {
-			randomString = randomString + characters.charAt(Math.floor(Math.random() * characters.length));
-		}
-		console.log("ANSWER: " + randomString);
-
-		var shuffle = '';
-		var rString = randomString.split('');
-		while (rString.length > 0) {
-			shuffle += rString.splice(rString.length * Math.random() << 0, 1);
-		}
-
-		//Display the play area
-		var playArea = document.getElementById("play-area");
-			playArea.style.display = 'block';
-			console.log("display play area");
-
-		
-		// Display the random string in the play area
-		document.getElementById("random").value = shuffle;
-
-		//Timer 
-		var timeleft = 10;
-		var downloadTimer = setInterval(function () {
-			if (timeleft <= 0) {
-				clearInterval(downloadTimer);
-				document.getElementById("answer-input").disabled = true;
-				document.getElementById("accept-btn").disabled = true;	
+	
+		function PlayGame() {
+			document.getElementById("showpercentage").value = "";
+	
+			quest = quest + 1;
+			// Generate a random string of characters
+			var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var numCharacters = Math.floor(Math.random() * 3) + 4;
+			randomString = "";
+			for (var i = 0; i < numCharacters; i++) {
+				randomString = randomString + characters.charAt(Math.floor(Math.random() * characters.length));
 			}
-			document.getElementById("progressBar").value = 10 - timeleft;
-			timeleft -= 1;
-		}, 1000);
-
-		// Enable the answer input, accept button, and next button
-		document.getElementById("answer-input").disabled = false;
-		document.getElementById("accept-btn").disabled = false;
-		document.getElementById("next-btn").disabled = false;
-
-		// Clear the answer input field
-		document.getElementById("answer-input").value = "";
-
-		// Set focus to the answer input field
-		document.getElementById("answer-input").focus();
-	}
-
-	function CheckAnswer() {
-		var originalChars = "";
-		document.getElementById("progressBar").value = 15;
-
-		console.log("Answer to be checked: " + randomString.toLowerCase());
-		// get the player's answer
-		var answer = document.getElementById("answer-input").value.trim();
-
-		// validate the answer
-		if (answer == "") {
-			alert("Please enter your answer.");
-			return;
-		}
-
-		// check if the answer is correct
-		var isCorrect = (answer.toLowerCase() == randomString.toLowerCase());
-		alert("Awesome!! The word is correct");
-
-		console.log("Correct: " + isCorrect);
-
-		if (isCorrect.valueOf(true)) {
-			console.log("In if statement, Validate answer");
-			// update the score
-			var scoreElem = document.getElementById("score");
-			if (isCorrect) {
-				console.log("In if to update score");
-				scoreElem.value = parseInt(scoreElem.value) + 1;
-				count = count + 1;
+			console.log("ANSWER: " + randomString);
+	
+			var shuffle = '';
+			var rString = randomString.split('');
+			while (rString.length > 0) {
+				shuffle += rString.splice(rString.length * Math.random() << 0, 1);
 			}
-
-			// append the result to the PlayersData array
-			var playerData = {
-				originalChars: randomString,
-				answer: answer,
-				count: count,
-				isCorrect: isCorrect
-			};
-			PlayersData.push(playerData);
-			console.log(playerData);
-			console.log(PlayersData);
-
-			// disable the answer input and Accept button, and enable the Next button
-			document.getElementById("answer-input").disabled = true;
-			document.getElementById("accept-btn").disabled = true;
+	
+			//Display the play area
+			var playArea = document.getElementById("play-area");
+				playArea.style.display = 'block';
+				console.log("display play area");
+	
+			
+			// Display the random string in the play area
+			document.getElementById("random").value = shuffle;
+	
+			//Timer 
+			var timeleft = 10;
+			var downloadTimer = setInterval(function () {
+				if (timeleft <= 0) {
+					clearInterval(downloadTimer);
+					document.getElementById("answer-input").disabled = true;
+					document.getElementById("accept-btn").disabled = true;	
+				}
+				document.getElementById("progressBar").value = 10 - timeleft;
+				timeleft -= 1;
+			}, 1000);
+	
+			// Enable the answer input, accept button, and next button
+			document.getElementById("answer-input").disabled = false;
+			document.getElementById("accept-btn").disabled = false;
 			document.getElementById("next-btn").disabled = false;
+	
+			// Clear the answer input field
+			document.getElementById("answer-input").value = "";
+	
+			// Set focus to the answer input field
+			document.getElementById("answer-input").focus();
 		}
-		showAll();
-	}
-
-	// Get the form element
-	var form = document.querySelector('.login-email');
-
-	// Add an event listener for the form submission
-	form.addEventListener('submit', function (event) {
-		// Prevent the default form submission behavior
-		event.preventDefault();
-
-		// Call the register function
-		register();
-	});
-
-	//showAll Function 
-	function showAll(){
-		var showAll = document.getElementById('showallplayers');
-		//clear Text Area
-		showAll.textContent = '';
-		for(i=0; i<PlayersData.length; i++){
-			showAll.textContent = `'Name: '${PlayersData[i].firstName + ' ' + PlayersData[i].lastName + ',' + 'Age: ' + PlayersData[0].age + ','
-			+ ' Answer: ' + PlayersData[i+1].originalChars + ',' + ' Guessed Answer: '+ PlayersData[i+1].answer + ',' + ' Was it correct: ' + PlayersData[i+1].isCorrect}`;
-		}
-	}
-	let currentDate = new Date();
-
-	function findPercentageScore() {
-		let percentageScore = (count / quest) * 100;
-			let displayText = `${PlayersData[0].firstName + ' ' + PlayersData[0].lastName}\n`;
-			displayText += `Date: ${currentDate}\n`;
-			displayText += `Total Questions: ${quest}\n`;
-			displayText += `Correct Answers: ${count}\n`;
-			displayText += `Percentage Score: ${percentageScore.toFixed(2)}%\n`;
-			document.getElementById('showpercentage').value = displayText;
-
-		//clearform 
-		clearForm();
-
-		//enable fields
-		document.getElementById("fname").disabled = false;
-		document.getElementById("lname").disabled = false;
-		document.getElementById("email").disabled = false;
-		document.getElementById("dob").disabled = false;
-		document.getElementById("gender").disabled = false;
-
-		//disable playarea
-		var playArea = document.getElementById("play-area");
-			playArea.style.display = 'none';
-			console.log("disable play area");
-
-
-		// reset play area 
-		resetPlayArea();
-		console.log("reset play area");
-
-		//disable buttons except register
-		document.querySelector("#register-btn").disabled = false;
-		document.querySelector("#end-btn").disabled = true;
-		document.querySelector("#start-btn").disabled = true;
-
-		//reset values
-		count = 0;
-		quest = 0;
-
-		document.getElementById("fname").focus;
-		console.log("focus on name feild");
-	}
-
-	function clearForm() {
-		document.getElementById("form").reset(); // reset the form to clear any error messages
-		document.getElementById("fname").value = ""; // set the value of each input element to an empty string
-		document.getElementById("lname").value = "";
-		document.getElementById("email").value = "";
-		document.getElementById("dob").value = "";
-		document.getElementById("age").value = "";
-		document.getElementById("gender").selectedIndex = 0; // reset the dropdown to the default option
-	}
-
-	function resetPlayArea() {
-		document.getElementById("score").value = 0;
-		document.getElementById("random").value = "";
-		document.getElementById("answer-input").value = "";
-		document.getElementById("chars").textContent = "";
-	}
-
-	function showfreq() {
-		let total = PlayersData.length;
-		let males = 0;
-		let females = 0;
-		let less50 = 0;
-		let fiftyTo59 = 0;
-		let sixtyTo69 = 0;
-		let seventyTo79 = 0;
-		let eightyTo89 = 0;
-		let ninetyTo99 = 0;
-		let hundred = 0;
-
-
-		let showChart = document.getElementById("showcharts");
-		// Loop through the total number of players
-		for (let i = 0; i < total; i++) {
-			showChart.style.display = "block";
-			// Check the gender of each player
-			if (PlayersData[i].gender === "male") {
-			males = males+1;
-			} else if (PlayersData[i].gender === "female") {
-			females = females+1;
+	
+		function CheckAnswer() {
+			var originalChars = "";
+			document.getElementById("progressBar").value = 15;
+	
+			console.log("Answer to be checked: " + randomString.toLowerCase());
+			// get the player's answer
+			var answer = document.getElementById("answer-input").value.trim();
+	
+			// validate the answer
+			if (answer == "") {
+				alert("Please enter your answer.");
+				return;
 			}
-			// Get the Percentage score for each plaer
-			let percentageScore = (PlayersData[i].count/ PlayersData[i].quest) * 100;
-
-			if (percentageScore < 50) {
-			less50++;
-			} else if (percentageScore >= 50 && percentageScore <= 59) {
-			fiftyTo59++;
-			} else if (percentageScore >= 60 && percentageScore <= 69) {
-			sixtyTo69++;
-			} else if (percentageScore >= 70 && percentageScore <= 79) {
-			seventyTo79++;
-			} else if (percentageScore >= 80 && percentageScore <= 89) {
-			eightyTo89++;
-			} else if (percentageScore >= 90 && percentageScore <= 99) {
-			ninetyTo99++;
-			} else if (percentageScore === 100) {
-			hundred++;
+	
+			// check if the answer is correct
+			var isCorrect = (answer.toLowerCase() == randomString.toLowerCase());
+			alert("Awesome!! The word is correct");
+	
+			console.log("Correct: " + isCorrect);
+	
+			if (isCorrect.valueOf(true)) {
+				console.log("In if statement, Validate answer");
+				// update the score
+				var scoreElem = document.getElementById("score");
+				if (isCorrect) {
+					console.log("In if to update score");
+					scoreElem.value = parseInt(scoreElem.value) + 1;
+					count = count + 1;
+				}
+	
+				// append the result to the PlayersData array
+				var playerData = {
+					originalChars: randomString,
+					answer: answer,
+					count: count,
+					isCorrect: isCorrect
+				};
+				PlayersData.push(playerData);
+				console.log(playerData);
+				console.log(PlayersData);
+	
+				// disable the answer input and Accept button, and enable the Next button
+				document.getElementById("answer-input").disabled = true;
+				document.getElementById("accept-btn").disabled = true;
+				document.getElementById("next-btn").disabled = false;
+			}
+			showAll();
+		}
+	
+		// Get the form element
+		var form = document.querySelector('.login-email');
+	
+		// Add an event listener for the form submission
+		form.addEventListener('submit', function (event) {
+			// Prevent the default form submission behavior
+			event.preventDefault();
+	
+			// Call the register function
+			register();
+		});
+	
+		//showAll Function 
+		function showAll(){
+			var showAll = document.getElementById('showallplayers');
+			//clear Text Area
+			showAll.textContent = '';
+			for(i=0; i<PlayersData.length; i++){
+				showAll.textContent = `'Name: '${PlayersData[i].firstName + ' ' + PlayersData[i].lastName + ',' + 'Age: ' + PlayersData[0].age + ','
+				+ ' Answer: ' + PlayersData[i+1].originalChars + ',' + ' Guessed Answer: '+ PlayersData[i+1].answer + ',' + ' Was it correct: ' + PlayersData[i+1].isCorrect}`;
 			}
 		}
-		// Create bar charts by stretching images in tables
-		let genderChart = "<table><tr><th>Gender&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
-		genderChart += `<tr><td>Male</td><td>${((males / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((males / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
-		genderChart += `<tr><td>Female</td><td>${((females / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((females / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
-		genderChart += "</table>";
-
-		let scoreChart = "<table><tr><th>Percentage Score&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
-		scoreChart += `<tr><td><50</td><td>&nbsp&nbsp&nbsp${((less50 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((less50 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>50-59</td><td>&nbsp&nbsp&nbsp${((fiftyTo59 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((fiftyTo59 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>60-69</td><td>&nbsp&nbsp&nbsp${((sixtyTo69 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((sixtyTo69 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>70-79</td><td>&nbsp&nbsp&nbsp${((seventyTo79 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((seventyTo79 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>80-89</td><td>&nbsp&nbsp&nbsp${((eightyTo89 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((eightyTo89 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>90-99</td><td>&nbsp&nbsp&nbsp${((ninetyTo99 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((ninetyTo99 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += `<tr><td>100</td><td>&nbsp&nbsp&nbsp${((hundred / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((hundred / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
-		scoreChart += "</table>";
-
-		//combine all charts and display in the showcharts div
-		showChart.innerHTML = genderChart + scoreChart;
-
-	}
-	setInterval(showfreq, 5000); //refresh chart every 5 seconds
-
-</script>
+		let currentDate = new Date();
+	
+		function findPercentageScore() {
+			let percentageScore = (count / quest) * 100;
+				let displayText = `${PlayersData[0].firstName + ' ' + PlayersData[0].lastName}\n`;
+				displayText += `Date: ${currentDate}\n`;
+				displayText += `Total Questions: ${quest}\n`;
+				displayText += `Correct Answers: ${count}\n`;
+				displayText += `Percentage Score: ${percentageScore.toFixed(2)}%\n`;
+				document.getElementById('showpercentage').value = displayText;
+	
+			//clearform 
+			clearForm();
+	
+			//enable fields
+			document.getElementById("fname").disabled = false;
+			document.getElementById("lname").disabled = false;
+			document.getElementById("email").disabled = false;
+			document.getElementById("dob").disabled = false;
+			document.getElementById("gender").disabled = false;
+	
+			//disable playarea
+			var playArea = document.getElementById("play-area");
+				playArea.style.display = 'none';
+				console.log("disable play area");
+	
+	
+			// reset play area 
+			resetPlayArea();
+			console.log("reset play area");
+	
+			//disable buttons except register
+			document.querySelector("#register-btn").disabled = false;
+			document.querySelector("#end-btn").disabled = true;
+			document.querySelector("#start-btn").disabled = true;
+	
+			//reset values
+			count = 0;
+			quest = 0;
+	
+			document.getElementById("fname").focus;
+			console.log("focus on name feild");
+		}
+	
+		function clearForm() {
+			document.getElementById("form").reset(); // reset the form to clear any error messages
+			document.getElementById("fname").value = ""; // set the value of each input element to an empty string
+			document.getElementById("lname").value = "";
+			document.getElementById("email").value = "";
+			document.getElementById("dob").value = "";
+			document.getElementById("age").value = "";
+			document.getElementById("gender").selectedIndex = 0; // reset the dropdown to the default option
+		}
+	
+		function resetPlayArea() {
+			document.getElementById("score").value = 0;
+			document.getElementById("random").value = "";
+			document.getElementById("answer-input").value = "";
+			document.getElementById("chars").textContent = "";
+		}
+	
+		function showfreq() {
+			let total = PlayersData.length;
+			let males = 0;
+			let females = 0;
+			let less50 = 0;
+			let fiftyTo59 = 0;
+			let sixtyTo69 = 0;
+			let seventyTo79 = 0;
+			let eightyTo89 = 0;
+			let ninetyTo99 = 0;
+			let hundred = 0;
+	
+	
+			let showChart = document.getElementById("showcharts");
+			// Loop through the total number of players
+			for (let i = 0; i < total; i++) {
+				showChart.style.display = "block";
+				// Check the gender of each player
+				if (PlayersData[i].gender === "male") {
+				males = males+1;
+				} else if (PlayersData[i].gender === "female") {
+				females = females+1;
+				}
+				// Get the Percentage score for each plaer
+				let percentageScore = (PlayersData[i].count/ PlayersData[i].quest) * 100;
+	
+				if (percentageScore < 50) {
+				less50++;
+				} else if (percentageScore >= 50 && percentageScore <= 59) {
+				fiftyTo59++;
+				} else if (percentageScore >= 60 && percentageScore <= 69) {
+				sixtyTo69++;
+				} else if (percentageScore >= 70 && percentageScore <= 79) {
+				seventyTo79++;
+				} else if (percentageScore >= 80 && percentageScore <= 89) {
+				eightyTo89++;
+				} else if (percentageScore >= 90 && percentageScore <= 99) {
+				ninetyTo99++;
+				} else if (percentageScore === 100) {
+				hundred++;
+				}
+			}
+			// Create bar charts by stretching images in tables
+			let genderChart = "<table><tr><th>Gender&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
+			genderChart += `<tr><td>Male</td><td>${((males / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((males / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
+			genderChart += `<tr><td>Female</td><td>${((females / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((females / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
+			genderChart += "</table>";
+	
+			let scoreChart = "<table><tr><th>Percentage Score&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
+			scoreChart += `<tr><td><50</td><td>&nbsp&nbsp&nbsp${((less50 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((less50 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>50-59</td><td>&nbsp&nbsp&nbsp${((fiftyTo59 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((fiftyTo59 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>60-69</td><td>&nbsp&nbsp&nbsp${((sixtyTo69 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((sixtyTo69 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>70-79</td><td>&nbsp&nbsp&nbsp${((seventyTo79 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((seventyTo79 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>80-89</td><td>&nbsp&nbsp&nbsp${((eightyTo89 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((eightyTo89 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>90-99</td><td>&nbsp&nbsp&nbsp${((ninetyTo99 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((ninetyTo99 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += `<tr><td>100</td><td>&nbsp&nbsp&nbsp${((hundred / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((hundred / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+			scoreChart += "</table>";
+	
+			//combine all charts and display in the showcharts div
+			showChart.innerHTML = genderChart + scoreChart;
+	
+		}
+		setInterval(showfreq, 5000); //refresh chart every 5 seconds
+	</script>
+</body>
 </html>

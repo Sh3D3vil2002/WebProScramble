@@ -24,9 +24,6 @@ body {
 
   .play-area{
     background-color: #2980B9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .play-area button{
@@ -42,7 +39,7 @@ body {
     color: #FFF;
     cursor: pointer;
     transition: .3s;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   .play-area button:hover{
