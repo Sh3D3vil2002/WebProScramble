@@ -50,7 +50,7 @@
 					disabled>Start</button>
 			</div>
 			<div class="input-group">
-				<button type="button" name="end" class="btn" id="end-btn" onclick=" findPercentageScore()"
+				<button type="button" name="end" class="btn" id="end-btn" onclick="findPercentageScore()"
 					disabled>End</button>
 			</div>
 		</form>
@@ -60,7 +60,7 @@
 				<textarea id="showpercentage" rows="4" cols="50" disabled></textarea>
 			</form>
 		</div>
-		<div class="play-area" id="play-area" style="display: none;">
+		<div class="play-area" id="play-area" style="display:none;">
 			<p class="login-text" style="font-size: 2rem; font-weight: 800;">Scramble Game</p>
 			<center>
 				<!-- timer -->
@@ -196,9 +196,10 @@
 
 		//Display the play area
 		var playArea = document.getElementById("play-area");
-		if (playArea.style.display === 'none') {
 			playArea.style.display = 'block';
-		}
+			console.log("display play area");
+
+		
 		// Display the random string in the play area
 		document.getElementById("random").value = shuffle;
 
@@ -207,7 +208,6 @@
 		var downloadTimer = setInterval(function () {
 			if (timeleft <= 0) {
 				clearInterval(downloadTimer);
-				PlayGame();
 			}
 			document.getElementById("progressBar").value = 10 - timeleft;
 			timeleft -= 1;
@@ -305,14 +305,15 @@
 		document.getElementById("dob").disabled = false;
 		document.getElementById("gender").disabled = false;
 
-		// reset play area 
-		resetPlayArea();
-
 		//disable playarea
 		var playArea = document.getElementById("play-area");
-		if (playArea.style.display === 'block') {
 			playArea.style.display = 'none';
-		}
+			console.log("disable play area");
+
+
+		// reset play area 
+		resetPlayArea();
+		console.log("reset play area");
 
 		//disable buttons except register
 		document.querySelector("#register-btn").disabled = false;
@@ -324,7 +325,7 @@
 		quest = 0;
 
 		document.getElementById("fname").focus;
-
+		console.log("focus on name feild");
 	}
 
 	function clearForm() {
@@ -343,8 +344,5 @@
 		document.getElementById("answer-input").value = "";
 		document.getElementById("chars").textContent = "";
 	}
-
-
 </script>
-
 </html>
