@@ -327,10 +327,10 @@
 		for (let i = 0; i < total; i++) {
 			showChart.style.display = "block";
 			// Check the gender of each player
-			if (PlayersData[i].gender.toLowerCase() === "male") {
-			males++;
-			} else if (PlayersData[i].gender.toLowerCase() === "female") {
-			females++;
+			if (PlayersData[i].gender === "male") {
+			males = males+1;
+			} else if (PlayersData[i].gender === "female") {
+			females = females+1;
 			}
 			// Get the Percentage score for each plaer
 			let percentageScore = (PlayersData[i].count/ PlayersData[i].quest) * 100;
