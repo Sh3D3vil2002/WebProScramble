@@ -86,6 +86,7 @@
 				</div>
 			</center>
 		</div>
+		<div id="showcharts" style="display: none;"></div>
 	</div>
 </body>
 <script>
@@ -307,6 +308,71 @@
 		document.getElementById("fname").focus;
 
 	}
+	
+		function showfreq() {
+		let total = PlayersData.length;
+		let males = 0;
+		let females = 0;
+		let less50 = 0;
+		let fiftyTo59 = 0;
+		let sixtyTo69 = 0;
+		let seventyTo79 = 0;
+		let eightyTo89 = 0;
+		let ninetyTo99 = 0;
+		let hundred = 0;
+
+
+		let showChart = document.getElementById("showcharts");
+		// Loop through the total number of players
+		for (let i = 0; i < total; i++) {
+			showChart.style.display = "block";
+			// Check the gender of each player
+			if (PlayersData[i].gender.toLowerCase() === "male") {
+			males++;
+			} else if (PlayersData[i].gender.toLowerCase() === "female") {
+			females++;
+			}
+			// Get the Percentage score for each plaer
+			let percentageScore = (PlayersData[i].count/ PlayersData[i].quest) * 100;
+
+			if (percentageScore < 50) {
+			less50++;
+			} else if (percentageScore >= 50 && percentageScore <= 59) {
+			fiftyTo59++;
+			} else if (percentageScore >= 60 && percentageScore <= 69) {
+			sixtyTo69++;
+			} else if (percentageScore >= 70 && percentageScore <= 79) {
+			seventyTo79++;
+			} else if (percentageScore >= 80 && percentageScore <= 89) {
+			eightyTo89++;
+			} else if (percentageScore >= 90 && percentageScore <= 99) {
+			ninetyTo99++;
+			} else if (percentageScore === 100) {
+			hundred++;
+			}
+		}
+		// Create bar charts by stretching images in tables
+		let genderChart = "<table><tr><th>Gender&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
+		genderChart += `<tr><td>Male</td><td>${((males / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((males / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
+		genderChart += `<tr><td>Female</td><td>${((females / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" width="${((females / total) * 100).toFixed(1)}" style="height: 50px;"></td></tr>`;
+		genderChart += "</table>";
+		
+		let scoreChart = "<table><tr><th>Percentage Score&nbsp&nbsp&nbsp</th><th>Percentage</th><th>Chart</th></tr>";
+		scoreChart += `<tr><td><50</td><td>&nbsp&nbsp&nbsp${((less50 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((less50 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>50-59</td><td>&nbsp&nbsp&nbsp${((fiftyTo59 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((fiftyTo59 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>60-69</td><td>&nbsp&nbsp&nbsp${((sixtyTo69 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((sixtyTo69 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>70-79</td><td>&nbsp&nbsp&nbsp${((seventyTo79 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((seventyTo79 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>80-89</td><td>&nbsp&nbsp&nbsp${((eightyTo89 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((eightyTo89 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>90-99</td><td>&nbsp&nbsp&nbsp${((ninetyTo99 / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((ninetyTo99 / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += `<tr><td>100</td><td>&nbsp&nbsp&nbsp${((hundred / total) * 100).toFixed(1)}%</td><td><img src="bar.jpg" style="width: ${((hundred / total) * 100).toFixed(1)}%; height: 50px;"></td></tr>`;
+		scoreChart += "</table>";
+
+		//combine all charts and display in the showcharts div
+		showChart.innerHTML = genderChart + scoreChart;
+		
+	}
+	setInterval(showfreq, 5000); //refresh chart every 5 seconds
+
 
 	function clearForm() {
 		document.getElementById("form").reset(); // reset the form to clear any error messages
