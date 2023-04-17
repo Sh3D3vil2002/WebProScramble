@@ -84,6 +84,14 @@
 				<div class="input-group">
 					<p id="chars" style="font-size: 2rem; font-weight: 800;"></p>
 				</div>
+				</br>
+				</br>
+				<div>
+					<form>
+						<h6>Players Data:</h6>
+						<textarea id="showallplayers" rows="4" cols="50"></textarea>
+					</form>
+				</div>
 			</center>
 		</div>
 	</div>
@@ -243,14 +251,15 @@
 				isCorrect: isCorrect
 			};
 			PlayersData.push(playerData);
+			console.log(playerData);
+			console.log(PlayersData);
 
 			// disable the answer input and Accept button, and enable the Next button
 			document.getElementById("answer-input").disabled = true;
 			document.getElementById("accept-btn").disabled = true;
 			document.getElementById("next-btn").disabled = false;
 		}
-
-
+		showAll();
 	}
 
 	// Get the form element
@@ -265,6 +274,16 @@
 		register();
 	});
 
+	//showAll Function 
+	function showAll(){
+		var showAll = document.getElementById('showallplayers');
+		//clear Text Area
+		showAll.textContent = '';
+		for(i=0; i<PlayersData.length; i++){
+			showAll.textContent = `${PlayersData[0].firstName + ',' + PlayersData[0].lastName + ',' + PlayersData[0].age + ','
+			+ PlayersData[i+1].originalChars + ',' + PlayersData[i+1].answer + ',' + PlayersData[i+1].isCorrect}`;
+		}
+	}
 	let currentDate = new Date();
 
 	function findPercentageScore() {
@@ -325,7 +344,5 @@
 		document.getElementById("chars").textContent = "";
 	}
 
-
 </script>
-
 </html>
