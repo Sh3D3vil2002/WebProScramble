@@ -18,6 +18,35 @@ body {
     align-items: center;
 }
 
+.colored {
+    accent-color: #AED6F1;
+  }
+
+  .play-area{
+    background-color: #2980B9;
+  }
+
+  .play-area button{
+    display: block;
+    width: 40%;
+    padding: 5px 10px;
+    text-align: center;
+    border: #111;
+    background: #AED6F1;
+    outline: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    color: #FFF;
+    cursor: pointer;
+    transition: .3s;
+    margin-bottom: 5px;
+  }
+
+  .play-area button:hover{
+    transform: translateY(-5px);
+    background: #29b9b6;
+  }
+
 .container {
     width: 400px;
     min-height: 400px;
@@ -87,6 +116,14 @@ body {
 .login-register-text a {
     text-decoration: none;
     color: #6c5ce7;
+}
+
+#showcharts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#FFF ;
+    margin-top: 20px;
 }
 
 @media (max-width: 430px) {
